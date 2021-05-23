@@ -8,11 +8,13 @@ from aiogram.types import CallbackQuery
 from keyboards import start_keyboard
 from loader import dp
 from states import UserState
+from utils.misc import rate_limit
 
 
 # Ловит команду /start, привествует пользователя, выводит стартовое меню
 # и переводит пользователя в состояние просмотра стартового меню
 @dp.message_handler(CommandStart(), state="*")
+@rate_limit(5, key='start')
 async def bot_start(message: types.Message, state: FSMContext):
     logging.info("start")
     # await message.delete()
@@ -27,6 +29,7 @@ async def bot_start(message: types.Message, state: FSMContext):
 # Ловит нажатие на инлайн-кнопку "В начало" и возвращает пользователя
 # в стартовое меню со сбросом состояния
 @dp.callback_query_handler(text_contains="to start", state="*")
+@rate_limit(5, key='start')
 async def return_to_start(call: CallbackQuery, state: FSMContext):
     logging.info("to start")
     await call.message.delete_reply_markup()
