@@ -1,3 +1,5 @@
+# Декоратор для установления ограничения скорости
+# и ключа для разных функций в случае троттлинга .
 def rate_limit(limit: int, key=None):
     def decorator(func):
         setattr(func, "throttling_rate_limit", limit)
@@ -6,4 +8,3 @@ def rate_limit(limit: int, key=None):
         return func
 
     return decorator
-
